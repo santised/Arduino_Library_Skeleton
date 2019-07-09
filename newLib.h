@@ -1,12 +1,13 @@
-#ifndef _CLASS_NAME_H
-#define _CLASS_NAME_H
+#ifndef _HEADER_PROTECTION_NAME_
+#define _HEADER_PROTECTION_NAME_
 
 #include <Wire.h>
 #include <SPI.h>
 #include <Arduino.h>
 
-typedef uint16_t i2cAddress;
-const i2cAddress defAddr = 0x00;
+#define 
+#define 
+#define 
 
 enum {
 };
@@ -14,9 +15,12 @@ enum {
 class Class_Name
 {  
   public:
-
-    className constructor(); // SPI Constructor
-    className constructor(uint16_t address); // I2C Constructor
+    
+    // Public Variables
+    
+    //Function declarations
+    Class_Name(); // SPI Constructor
+    Class_Name(uint8_t address); // I2C Constructor
 
     bool begin( TwoWire &wirePort );
     bool beginSpi(uint8_t userCsPin, SPIClass &spiPort);
@@ -25,18 +29,28 @@ class Class_Name
     bool beginSpi(SPIClass &spiPort = SPI); 
 
   private:
-
-    uint16_t _address;
-
-    // This generic function reads an eight bit register. It takes the register's
-    // address as its' parameter. 
-    uint8_t readRegister(uint8_t _reg);
+    
+    // Private Variables
+    uint8_t _address;
 
     // This generic function handles I2C write commands for modifying individual
     // bits in an eight bit register. Paramaters include the register's address, a mask 
     // for bits that are ignored, the bits to write, and the bits' starting
     // position.
     void writeRegister(uint8_t _wReg, uint8_t _mask, uint8_t _bits, uint8_t _startPosition);
+
+    // This generic function does a basic I-squared-C write transaction at the
+    // given address, and writes the given _command argument. 
+    void _writeCommand(uint8_t _command);
+
+    // This generic function reads an eight bit register. It takes the register's
+    // address as its' parameter. 
+    uint8_t readRegister(uint8_t _reg);
+
+    // This generic function does a basic I-squared-C read transaction at the given
+    // addres, taking the number of reads as argument. 
+    uint8_t _readCommand(uint8_t _numReads);
+
 
     TwoWire *_i2cPort;
     SPIClass *_spiPort;

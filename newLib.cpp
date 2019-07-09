@@ -11,7 +11,7 @@
 #include "Class_Name.h"
 
 Class_Name::Class_Name(){} //Constructor for SPI
-Class_Name::Class_Name(uint16_t address){  _address = address; } //Constructor for I2C
+Class_Name::Class_Name(uint8_t address){  _address = address; } //Constructor for I2C
 
 bool Class_Name::begin( TwoWire &wirePort )
 {
@@ -51,7 +51,7 @@ bool Class_Name::beginSpi(uint8_t userCsPin, SPIClass &spiPort)
 // bits in an eight bit register. Paramaters include the register's address, a mask 
 // for bits that are ignored, the bits to write, and the bits' starting
 // position.
-void Class_Name::writeRegister(uint8_t _wReg, uint8_t _mask, uint8_t _bits, uint8_t _startPosition)
+void Class_Name::_writeRegister(uint8_t _wReg, uint8_t _mask, uint8_t _bits, uint8_t _startPosition)
 {
   if(_i2cPort == NULL) {
     _spiWrite = readRegister(_wReg); // Get the current value of the register
@@ -75,9 +75,19 @@ void Class_Name::writeRegister(uint8_t _wReg, uint8_t _mask, uint8_t _bits, uint
   }
 }
 
+// This generic function does a basic I-squared-C write transaction at the
+// given address, and writes the given _command argument. 
+void Class_Name::_writeCommand(uint8_t _command){
+
+    _i2cPort->beginTransmission(_address);
+    _i2cPort->write(_command);
+    _i2cPort->endTransmission(); 
+
+}
+
 // This generic function reads an eight bit register. It takes the register's
 // address as its' parameter. 
-uint8_t Class_Name::readRegister(uint8_t _reg)
+uint8_t Class_Name::_readRegister(uint8_t _reg)
 {
 
   if(_i2cPort == NULL) {
@@ -98,3 +108,15 @@ uint8_t Class_Name::readRegister(uint8_t _reg)
   }
 }
 
+
+
+// This generic function does a basic I-squared-C read transaction at the given
+// addres, taking the number of reads as argument. 
+uint8_t Class_Name::_readCommand(uint8_t _numReads)
+{
+
+  _i2cPort->requestFrom(_address, _numReads);  
+  uint8_t someVal = _i2cPort->read();
+  return(someVal);
+
+}
